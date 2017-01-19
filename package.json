@@ -1,0 +1,39 @@
+{
+  "name": "ideabox",
+  "version": "1.0.0",
+  "description": "An Ideabox application. A user can post ideas; comment on posted ideas; and can also vote for or against an idea- upvote/downvote.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tomipaul/Ideabox.git"
+  },
+  "keywords": [
+    "node.js",
+    "expressjs",
+    "firebase",
+    "ideabox",
+    "html",
+    "css",
+    "javascript",
+    "comments",
+    "upvote",
+    "downvote",
+    "ideas"
+  ],
+  "author": "Oluwatomi Paul Akande",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tomipaul/Ideabox/issues"
+  },
+  "homepage": "https://github.com/tomipaul/Ideabox#readme",
+  "dependencies": {
+    "body-parser": "^1.16.0",
+    "cookie-parser": "^1.4.3",
+    "express": "^4.14.0",
+    "firebase": "^3.4.1",
+    "firebase-admin": "^4.0.4"
+  }
+}
