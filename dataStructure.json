@@ -1,0 +1,41 @@
+{
+	"users": {
+		"userId": {
+			"upvotedIdeas": {
+				"ideaId": true,
+				"ideaId": true
+			},
+			"downvotedIdeas": {
+				"ideaId": true,
+				"ideaId": true
+			}
+		},
+		"userId": "****",
+		"userId": "****"
+	},
+
+	"ideas": {
+		"ideaId": {
+			"userId": "userid",
+			"ideaTitle": "***",
+			"ideaDescription": "****",
+			"upvotes": "***",
+			"downvotes": "***",
+			"date_posted": "timestamp"
+		},
+
+		"ideaId": {},
+		"ideaId": {}
+	},
+
+	"comments": {
+		"commentId": {
+			"ideaId": "***",
+			"commentStatement": "****",
+			"upvotes": "****",
+			"downvotes": "****"
+		},
+		"commentId": {},
+		"commentId": {}
+	}
+}
