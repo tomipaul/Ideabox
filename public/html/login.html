@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" type='text/css' href='/css/loginSignup.css'/>
+</head>
+<body>
+  <script src="/js/login.js"></script>
+  <header><img src='/images/header_logo.png'></img></header>
+  <span class = 'gradient'></span>
+  <form action='/api/login' method='post' id="loginForm">
+    <h2> Login to Ideabox </h2>
+    <span class = 'param'>Email</span>
+    <input type="email" name='email' id="email" placeholder="e.g bootcamper@andela.com"/>
+    <span class='param'>Password</span>
+    <input type="password" name='password' id="password" placeholder="Enter Password"/>
+    <input type="submit" name='submit' id="submit" value="Login" />
+    <span id ='message'> Don't have an Ideabox account? <a href='/signup'>Signup</a> </span>
+  </form>
+  <div></div>
+</body>
+</html>

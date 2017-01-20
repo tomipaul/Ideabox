@@ -21,7 +21,7 @@ var clientApp = firebase.initializeApp({
 }, 'client');
 
 var adminAuth = adminApp.auth();
-var clientDb = clientApp.database();
+var clientDb = adminApp.database();
 var clientAuth = clientApp.auth();
 
 var checkToken = function(req, res, next) {
@@ -39,6 +39,17 @@ var checkToken2 = function(req, res, next) {
 		res.redirect('/privileged/me/ideas');
 	}
 	else {
+		next();
+	}
+}
+
+var checkToken3 = function(req, res, next) {
+	var token = req.get('Authorization');
+	if (typeof token == 'undefined') {
+		res.status(401).end();
+	}
+	else {
+		req.token = token;
 		next();
 	}
 }
@@ -88,7 +99,7 @@ var verifyToken = function (req, res, next) {
 }
 
 var setResponseCookies = function(req, res, next) {
-	res.cookie('token', req.token, {httpOnly: true});
+	res.cookie('token', req.token, {httpOnly: false});
 	next();
 }
 
@@ -107,7 +118,7 @@ app.post('/api/login', login, getToken, verifyToken, setResponseCookies, userPag
 
 app.post('/api/signup', signup, getToken, verifyToken, setResponseCookies, userPage);
 
-app.use('/api/member', checkToken, verifyToken);
+app.use('/api/member', checkToken3, verifyToken);
 
 app.get('/api/member/ideas', function(req, res) {
 	var ref = clientDb.ref('ideas');
@@ -119,11 +130,12 @@ app.get('/api/member/ideas', function(req, res) {
 app.get('/api/member/me/ideas', function(req, res) {
 	var ref = clientDb.ref('ideas');
 	ref.orderByChild('userId').equalTo(req.useruid).once('value', function(snapshot) {
+		console.log(snapshot.val());
 		res.json(snapshot.val());
 	});
 });
 
-app.get('/api/member/ideas/:ideaid', function() {
+app.get('/api/member/ideas/:ideaid', function(req, res) {
 	var ideaId = req.params.ideaid;
 	var ref = clientDb.ref('ideas/'+ideaId);
 	ref.once('value', function(snapshot) {
@@ -140,20 +152,21 @@ app.get('/api/member/:ideaid/comments', function(req, res) {
 });
 
 app.post('/api/member/me/idea', function(req, res) {
-	var [title, description] = [req.body.title, req.body.description];
+	var [title, description] = [req.body.ideaTitle, req.body.ideaDescription];
 	var ideaUpdate = {
 		userId : req.useruid,
 		ideaTitle: title,
 		ideaDescription: description,
-		//date_posted://to be implemented
+		upvotes: 0,
+		downvotes: 0
 	};
 	clientDb.ref('ideas').push(ideaUpdate)
 	.then(function() {
-		return res.json(ideaUpdate);
+		return res.json('success');
 	}, function(error) {
 		return res.json(error);
 	});
-}, userPage);
+});
 
 app.post('/api/member/:ideaid/comment', function(req, res) {
 	var ideaId = req.params.ideaid;
@@ -174,12 +187,7 @@ app.post('/api/member/:ideaid/upvote', function(req, res) {
 	var ideaId = req.params.ideaid;
 	var ref = clientDb.ref('ideas/'+ideaId+'/upvotes');
 	ref.transaction(function(currentUpvotes) {
-		if (currentUpvotes==null) {
-			return 1;
-		}
-		else {
-			return currentUpvotes + 1;
-		}
+		return currentUpvotes + 1;
 	}, function(error, committed, snapshot) {
 		if (error || !committed) {
 			return res.json("Upvote failed");
@@ -193,11 +201,12 @@ app.post('/api/member/:ideaid/downvote', function(req, res) {
 	var ideaId = req.params.ideaid;
 	var ref = clientDb.ref('ideas/'+ideaId+'/downvotes');
 	ref.transaction(function(currentDownvotes) {
-		if (currentDownvotes==null) {
-			return 1;
-		}
-		else {
-			return currentDownvotes + 1;
+		return currentDownvotes + 1;
+	}, function(error, committed, snapshot) {
+		if(error || !committed) {
+			return res.json("Downvote failed");
+		} else {
+			return res.json(snapshot.val());
 		}
 	});
 });
@@ -209,7 +218,11 @@ app.get('/privileged/me/postidea', function(req, res) {
 });
 
 app.get('/privileged/me/ideas', function(req, res) {
-	res.send("You have logged in before! Welcome to member page");
+	return res.sendFile(__dirname + '/public/html/show_ideas.html');
+});
+
+app.get('/privileged/idea', function(req, res) {
+	return res.sendFile(__dirname + '/public/html/idea.html');
 });
 
 app.get('/signup', checkToken2, function(req, res) {
