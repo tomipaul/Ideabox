@@ -215,6 +215,10 @@ app.post('/api/member/:ideaid/downvote', function(req, res) {
 
 app.use('/privileged', checkToken, verifyToken);
 
+app.get('/', function(req, res) {
+	res.redirect('/login');
+})
+
 app.get('/privileged/me/postidea', function(req, res) {
 	return res.sendFile(__dirname + '/public/html/create_idea.html');
 });
