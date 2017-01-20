@@ -32,7 +32,7 @@ $(document).ready(function() {
 			dataType: "text",
 			success: function (result) {
 				console.log(result);
-				window.location.replace('http://localhost:8080/privileged/me/ideas');
+				window.location.replace('/privileged/me/ideas');
 			},
 			error: function(xhr, status, error) {
 				console.log(error);
