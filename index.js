@@ -5,6 +5,8 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var app = express();
 
+var port = process.env.PORT || 8080;
+
 var serviceAccount = require(__dirname + '/serviceKey.json');
 
 var adminApp = admin.initializeApp({
@@ -233,5 +235,5 @@ app.get('/login', checkToken2, function(req, res) {
 	return res.sendFile(__dirname + '/public/html/login.html');
 });
 
-app.listen('8080');
+app.listen(port);
 console.log('App listening on port 8080');
