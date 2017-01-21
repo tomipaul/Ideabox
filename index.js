@@ -96,7 +96,7 @@ var verifyToken = function (req, res, next) {
 		req.useruid = decodedToken.uid;
 		next();
 	}, function (error) {
-		res.json(error);
+		res.redirect('/login');
 	});
 }
 
@@ -132,7 +132,6 @@ app.get('/api/member/ideas', function(req, res) {
 app.get('/api/member/me/ideas', function(req, res) {
 	var ref = clientDb.ref('ideas');
 	ref.orderByChild('userId').equalTo(req.useruid).once('value', function(snapshot) {
-		console.log(snapshot.val());
 		res.json(snapshot.val());
 	});
 });
