@@ -15,7 +15,19 @@ function getCookie(cname) {
     return "";
 }
 
+function convertTextAreaToMarkdown() {
+	var converter = new showdown.Converter();
+    var ideaDescription = document.getElementById('ideaDescription');
+    var markdownArea = document.getElementById('markdown');
+
+    var ideaDescriptionText = ideaDescription.value;
+    html = converter.makeHtml(ideaDescriptionText);
+    markdownArea.innerHTML = html;
+}
+
 $(document).ready(function() {
+	$("#ideaDescription").on('input', convertTextAreaToMarkdown);
+	convertTextAreaToMarkdown();
 	$("#postIdeaForm").submit(function(event) {
 		event.preventDefault();
 		var ideaTitle = $("#ideaTitle").val();
