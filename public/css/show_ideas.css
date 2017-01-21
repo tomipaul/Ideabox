@@ -15,7 +15,7 @@ body {
 header {
 	display: flex;
 	display: -webkit-flex;
-	height: 15%;
+	min-height: 15%;
 	width: 80%;
 	margin: auto;
 	margin-top: 0;
