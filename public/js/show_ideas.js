@@ -27,6 +27,8 @@ function populateIdeas(ideas) {
 		var downvotes = document.createTextNode(ideaObject['downvotes']);
 		var upthumb = document.createElement('img');
 		var downthumb = document.createElement('img');
+		upthumb.id = 'upthumb';
+		downthumb.id = 'downthumb';
 		upthumb.src='/images/thumb-up.png';
 		downthumb.src='/images/thumb-down.png';
 		anchor.appendChild(title);
