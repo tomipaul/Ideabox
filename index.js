@@ -96,6 +96,7 @@ var verifyToken = function (req, res, next) {
 		req.useruid = decodedToken.uid;
 		next();
 	}, function (error) {
+		res.clearCookie('token', { path: '/' });
 		res.redirect('/login');
 	});
 }
