@@ -1,11 +1,7 @@
 function populateIdeas(ideas) {
-	var count = 0;
 	var ideaObjects = JSON.parse(ideas);
 	for (var ideaId in ideaObjects) {
 		var ideaObject = ideaObjects[ideaId];
-		if (count == 15) {
-			break;
-		}
 		var ideaDiv = document.createElement('div');
 		ideaDiv.className = "ideaDiv";
 		var ideaTitleDiv = document.createElement('div');
@@ -38,7 +34,6 @@ function populateIdeas(ideas) {
 		ideaUpvoteSpan.appendChild(upvotes);
 		ideaDownvoteSpan.appendChild(downvotes);
 		ideaDownvoteSpan.appendChild(downthumb);
-		count+=1;
 		document.body.insertBefore(ideaDiv, document.getElementById('showfooter'));
 	}
 }
