@@ -34,7 +34,9 @@ function getIdea(cb) {
 function populateIdea(idea) {
 	var ideaObject = JSON.parse(idea);
 	document.getElementById('ideaTitle').innerHTML = ideaObject['ideaTitle'];
-	document.getElementById('ideaDescription').innerHTML = ideaObject['ideaDescription'];
+	var converter = new showdown.Converter();
+	html = converter.makeHtml(ideaObject['ideaDescription']);
+	document.getElementById('ideaDescription').innerHTML = html;
 }
 
 function getComments(cb) {
@@ -62,7 +64,7 @@ function populateComments(comments) {
 		commentDiv.className = "commentDiv";
 		var statement = document.createTextNode(commentObject['commentStatement']);
 		commentDiv.appendChild(statement);
-		document.getElementById(commentsDiv).appendChild(commentDiv);
+		document.getElementById('commentsDiv').appendChild(commentDiv);
 	}
 	var newCommentDiv = document.createElement('div');
 	newCommentDiv.id = "newCommentDiv";
@@ -87,14 +89,13 @@ $(document).ready(function() {
 		populateComments(comments);
 	});
 
-	$("#submitComment").click(function(event) {
+	$("#commentsDiv").on("click", "#submitComment", function(event) {
 		event.preventDefault();
 		var cookie = getCookie('token');
 		var ideaId = window.location.hash.slice(1);
-		alert(ideaId);
 		var commentStatement = $("#newComment").val();
 		var uri = `/api/member/${ideaId}/comment`;
-		var comment = {ideaId: ideaId, commentStatement: commentStatement};
+		var comment = {commentStatement: commentStatement};
 		$.ajax({
 			url: encodeURI(uri),
 			type: 'POST',
@@ -104,8 +105,10 @@ $(document).ready(function() {
 			data: comment,
 			dataType: "text",
 			success: function (result) {
-				console.log(result);
-				window.location.replace('http://localhost:8080/privileged/ideas/'+ideaId);
+				$("#commentsDiv").empty();
+				getComments(function(comments) {
+					populateComments(comments);
+				});
 			},
 			error: function(xhr, status, error) {
 				console.log(error);
