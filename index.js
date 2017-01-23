@@ -73,7 +73,6 @@ var signup = function(req, res, next) {
 	.then(function(user) {
 		user.updateProfile({displayName: fullName})
 		.then(function() {
-			console.log(user.email, user.uid); // To be removed when deployed
 			req.user = user;
 			next();
 		});
@@ -94,7 +93,16 @@ var getToken = function(req, res, next) {
 var verifyToken = function (req, res, next) {
 	adminAuth.verifyIdToken(req.token).then(function(decodedToken) {
 		req.useruid = decodedToken.uid;
-		next();
+		if (typeof req.user === 'undefined') {
+			adminAuth.getUser(req.useruid)
+			.then(function(userRecord) {
+				req.user = userRecord;
+				next();
+			});
+		}
+		else {
+			next();
+		}
 	}, function (error) {
 		res.clearCookie('token', { path: '/' });
 		res.redirect('/login');
@@ -156,7 +164,8 @@ app.get('/api/member/:ideaid/comments', function(req, res) {
 app.post('/api/member/me/idea', function(req, res) {
 	var [title, description] = [req.body.ideaTitle, req.body.ideaDescription];
 	var ideaUpdate = {
-		userId : req.useruid,
+		userId: req.useruid,
+		userName: req.user.displayName, 
 		ideaTitle: title,
 		ideaDescription: description,
 		upvotes: 0,
@@ -172,12 +181,13 @@ app.post('/api/member/me/idea', function(req, res) {
 
 app.post('/api/member/:ideaid/comment', function(req, res) {
 	var ideaId = req.params.ideaid;
-	var statement = req.body.statement;
+	var statement = req.body.commentStatement;
 	var commentUpdate = {
 		ideaId: ideaId,
+		userName: req.user.displayName,
 		commentStatement: statement
 	};
-	clientDb.ref('comments').push(ideaUpdate)
+	clientDb.ref('comments').push(commentUpdate)
 	.then(function() {
 		return res.json(commentUpdate);
 	}, function(error) {
