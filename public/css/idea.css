@@ -21,12 +21,12 @@ header {
 	background-color: rgb(0,221,255);
 }
 
-#commentsDiv {
+#ideaDiv {
 	display: flex;
 	display: -webkit-flex;
 	flex-direction: column;
 	margin: auto;
-	width: 70%;
+	width: 50%;
 	border-style: solid;
     border-width: 1px;
     padding: 20px;
@@ -36,12 +36,20 @@ header {
 }
 
 #ideaTitle {
-	width: 70%;
-	font-size: 20px;
+	font-size: 25px;
+	font-weight: 700;
+}
+
+#ideaDiv > hr {
+	height: 3px;
+	width: 100%;
+	background-color: rgb(0,221,255);
 }
 
 #ideaDescription {
-	font-size: 20px;
+	font-size: 18px;
+	margin: 20px 0px;
+	text-align: justify;
 }
 
 #newComment {
@@ -51,4 +59,15 @@ header {
 
 #submitComment {
 	margin-left: 5px;
+}
+
+#commentsDiv {
+	background-color: #b2beb5;
+	font-family: cursive; 
+}
+
+.commentDiv {
+	background-color: white;
+	margin: 5px;
+	height: 1cm;
 }
