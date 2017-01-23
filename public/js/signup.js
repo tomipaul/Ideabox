@@ -21,14 +21,3 @@ function checkPassword() {
 document.addEventListener('DOMContentLoaded', function () {
 	document.getElementById('password2').addEventListener('input', checkPassword);
 });
-
-/*
-var email = document.getElementById('email').value;
-	var password = document.getElementById('password').value;
-	var firstName = document.getElementById('firstName').value;
-	var lastName = document.getElementById('lastName').value;
-document.addEventListener('DOMContentLoaded', function () {
-	document.getElementById('password2').addEventListener('input', checkPassword);
-	document.getElementById('signupForm').addEventListener('submit', createAccount);
-	document.querySelector("body > div").innerHTML=error;
-});*/
