@@ -17,6 +17,7 @@
 	"ideas": {
 		"ideaId": {
 			"userId": "userid",
+			"userName": "***",
 			"ideaTitle": "***",
 			"ideaDescription": "****",
 			"upvotes": "***",
@@ -31,6 +32,7 @@
 	"comments": {
 		"commentId": {
 			"ideaId": "***",
+			"userName": "***",
 			"commentStatement": "****",
 			"upvotes": "****",
 			"downvotes": "****"
