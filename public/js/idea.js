@@ -37,6 +37,11 @@ function populateIdea(idea) {
 	var converter = new showdown.Converter();
 	html = converter.makeHtml(ideaObject['ideaDescription']);
 	document.getElementById('ideaDescription').innerHTML = html;
+	document.getElementById('ideaUserName').innerHTML = ideaObject['userName'];
+	var upvotes = document.createTextNode(ideaObject['upvotes']);
+	document.getElementById('upvoteSpan').appendChild(upvotes);
+	var downvotes = document.createTextNode(ideaObject['downvotes']);
+	document.getElementById('downvoteSpan').appendChild(downvotes);
 }
 
 function getComments(cb) {
@@ -62,6 +67,11 @@ function populateComments(comments) {
 		var commentObject = commentObjects[commentId];
 		var commentDiv = document.createElement('div');
 		commentDiv.className = "commentDiv";
+		var nameSpan = document.createElement('span');
+		nameSpan.className = "nameSpan";
+		var name = document.createTextNode(commentObject["userName"]);
+		nameSpan.appendChild(name);
+		commentDiv.appendChild(nameSpan);
 		var statement = document.createTextNode(commentObject['commentStatement']);
 		commentDiv.appendChild(statement);
 		document.getElementById('commentsDiv').appendChild(commentDiv);
@@ -78,6 +88,14 @@ function populateComments(comments) {
 	newCommentDiv.appendChild(newComment);
 	newCommentDiv.appendChild(submitComment);
 	document.getElementById('commentsDiv').appendChild(newCommentDiv);
+}
+
+function commentUpvoted() {
+	var upvoteCountNode = document.getElementById('upvoteSpan').childNodes[1];
+	var upvoteCount = upvoteCountNode.nodeValue;
+	upvoteCountNode.nodeValue = parseInt(upvoteCount) + 1;
+	var upthumb = document.getElementById('upvoteSpan').childNodes[0];
+	upthumb.src = '/images/thumbsup.png';
 }
 
 $(document).ready(function() {
@@ -105,8 +123,8 @@ $(document).ready(function() {
 			data: comment,
 			dataType: "text",
 			success: function (result) {
-				$("#commentsDiv").empty();
 				getComments(function(comments) {
+					$("#commentsDiv").empty();
 					populateComments(comments);
 				});
 			},
@@ -115,4 +133,6 @@ $(document).ready(function() {
 			}
 		});
 	});
+
+	$("#upvoteSpan").on("click", "img", commentUpvoted);
 });
