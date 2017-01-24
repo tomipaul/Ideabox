@@ -182,6 +182,7 @@ app.post('/api/member/me/idea', function(req, res) {
 app.post('/api/member/:ideaid/comment', function(req, res) {
 	var ideaId = req.params.ideaid;
 	var statement = req.body.commentStatement;
+	console.log(req.user.displayName);
 	var commentUpdate = {
 		ideaId: ideaId,
 		userName: req.user.displayName,
