@@ -149,7 +149,16 @@ app.get('/api/member/ideas/:ideaid', function(req, res) {
 	var ideaId = req.params.ideaid;
 	var ref = clientDb.ref('ideas/'+ideaId);
 	ref.once('value', function(snapshot) {
-		res.json(snapshot.val());
+		var ideaObject = snapshot.val();
+		if ('upvoteUsers' in ideaObject && req.useruid in ideaObject['upvoteUsers']) {
+			ideaObject['vote'] = 'upvoted';
+		}
+		else if ('downvoteUsers' in ideaObject && req.useruid in ideaObject['downvoteUsers']) {
+			ideaObject['vote'] = 'downvoted';
+		}
+		delete ideaObject['downvoteUsers'];
+		delete ideaObject['upvoteUsers'];
+		res.json(ideaObject);	
 	});
 });
 
@@ -182,7 +191,6 @@ app.post('/api/member/me/idea', function(req, res) {
 app.post('/api/member/:ideaid/comment', function(req, res) {
 	var ideaId = req.params.ideaid;
 	var statement = req.body.commentStatement;
-	console.log(req.user.displayName);
 	var commentUpdate = {
 		ideaId: ideaId,
 		userName: req.user.displayName,
@@ -196,30 +204,57 @@ app.post('/api/member/:ideaid/comment', function(req, res) {
 	});
 });
 
-app.post('/api/member/:ideaid/upvote', function(req, res) {
+app.put('/api/member/:ideaid/upvote', function(req, res) {
 	var ideaId = req.params.ideaid;
-	var ref = clientDb.ref('ideas/'+ideaId+'/upvotes');
-	ref.transaction(function(currentUpvotes) {
+	var ref = clientDb.ref('ideas/'+ideaId);
+	ref.child('upvotes').transaction(function(currentUpvotes) {
 		return currentUpvotes + 1;
 	}, function(error, committed, snapshot) {
 		if (error || !committed) {
 			return res.json("Upvote failed");
 		} else {
-			return res.json(snapshot.val());
+			ref.child('upvoteUsers/'+req.useruid).set(true)
+			.then(function() {
+				return res.json(snapshot.val());
+			});
 		}
 	});
 });
 
-app.post('/api/member/:ideaid/downvote', function(req, res) {
+
+app.put('/api/member/:ideaid/downvote', function(req, res) {
 	var ideaId = req.params.ideaid;
-	var ref = clientDb.ref('ideas/'+ideaId+'/downvotes');
-	ref.transaction(function(currentDownvotes) {
+	var ref = clientDb.ref('ideas/'+ideaId);
+	ref.child('downvotes').transaction(function(currentDownvotes) {
 		return currentDownvotes + 1;
 	}, function(error, committed, snapshot) {
 		if(error || !committed) {
 			return res.json("Downvote failed");
 		} else {
-			return res.json(snapshot.val());
+			ref.child('downvoteUsers/'+req.useruid).set(true)
+			.then(function() {
+				return res.json(snapshot.val());
+			});
+		}
+	});
+});
+
+app.put('/api/member/:ideaid/unvote/:votetype', function(req, res) {
+	var ideaId = req.params.ideaid;
+	var votetype = req.params.votetype;
+	var ref = clientDb.ref(`ideas/${ideaId}`);
+	var child = (votetype==='upvote')?'upvotes':'downvotes';
+	ref.child(child).transaction(function(currentVotes) {
+		return currentVotes - 1;
+	}, function(error, committed, snapshot) {
+		if (error || !committed) {
+			return res.json("Unvote failed");
+		} else {
+			var users = (votetype==='upvote')?'upvoteUsers':'downvoteUsers';
+			ref.child(`${users}/${req.useruid}`).remove()
+			.then(function() {
+				return res.json(snapshot.val());
+			});
 		}
 	});
 });
