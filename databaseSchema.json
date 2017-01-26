@@ -22,7 +22,15 @@
 			"ideaDescription": "****",
 			"upvotes": "***",
 			"downvotes": "***",
-			"date_posted": "timestamp"
+			"date_posted": "timestamp",
+			"upvoteUsers": {
+				"userId": true,
+				"userId": true
+			},
+			"downvoteUsers": {
+				"userId": true,
+				"userId": true
+			}
 		},
 
 		"ideaId": {},
