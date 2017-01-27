@@ -34,15 +34,17 @@ function getIdea(cb) {
 function populateIdea(idea) {
 	var ideaObject = JSON.parse(idea);
 	document.getElementById('ideaTitle').innerHTML = ideaObject['ideaTitle'];
+	var ideaDescription = ideaObject['ideaDescription'];
 	var converter = new showdown.Converter();
-	html = converter.makeHtml(ideaObject['ideaDescription']);
-	document.getElementById('ideaDescription').innerHTML = html;
+	html = converter.makeHtml(ideaDescription);
+	var ideaDescriptionDiv = document.getElementById('ideaDescription')
+	ideaDescriptionDiv.data = ideaDescription;
+	ideaDescriptionDiv.innerHTML = html;
 	document.getElementById('ideaUserName').innerHTML = ideaObject['userName'];
 	var upvotes = document.createTextNode(ideaObject['upvotes']);
 	document.getElementById('upvoteSpan').appendChild(upvotes);
 	var downvotes = document.createTextNode(ideaObject['downvotes']);
 	document.getElementById('downvoteSpan').appendChild(downvotes);
-	console.log(ideaObject['vote']);
 }
 
 function renderVote(idea) {
@@ -228,7 +230,6 @@ function clickVote(elem) {
 	}
 }
 
-
 $(document).ready(function() {
 	getIdea(function(idea) {
 		populateIdea(idea);
@@ -248,4 +249,16 @@ $(document).ready(function() {
 		event.preventDefault();
 		clickVote(this);
 	});
+
+	$('#ideaDescription').on('focus', function(event) {
+		event.preventDefault();
+		this.innerHTML = this.data;
+	});
+
+	$('#ideaDescription').on('blur', function(event) {
+		event.preventDefault();
+		var converter = new showdown.Converter();
+		html = converter.makeHtml(this.data);
+		this.innerHTML = html;
+	})
 });
