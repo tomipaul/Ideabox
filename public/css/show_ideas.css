@@ -15,7 +15,7 @@ body {
 header {
 	display: flex;
 	display: -webkit-flex;
-	min-height: 15%;
+	height: 15%;
 	width: 80%;
 	margin: auto;
 	margin-top: 0;
@@ -40,21 +40,54 @@ header > nav {
 	text-align: center;
 }
 
-.ideaDiv {
+#menu {
+	background-color: #b2beb5;
+	height: 1cm;
+	width: 80%;
+	margin: auto;
+	opacity: 0.5;
+}
+
+#menu > img {
+	display: inline-block;
+	float: right;
+	width: 20px;
+	height: 20px;
+	padding-left: 10px;
+	padding-right: 10px;
+	margin-left: 5px;
+	margin-right: 5px;
+	margin-top: 2px;
+}
+
+#menu > img:hover {
+	cursor: pointer;
+	height: 30px;
+	width: 30px;
+}
+
+#ideasDiv {
 	display: flex;
 	display: -webkit-flex;
 	flex-direction: column;
 	margin: auto;
-	width: 30%;
+	width: 80%;
+	height: 80%;
+	overflow: none;
+}
+
+.ideaDiv {
+	display: block;
+	margin: auto;
+	width: 35%;
 	border-style: solid;
 	border-width: 1px;
 	border-radius: 4px;
 	border-color: rgb(0,221,255);
 	margin-top: 5px;
 	font-family: times;
-	font-size: 25px;
+	font-size: 22px;
 	text-align: center;
-	justify-content: space-around;
 }
 
 .ideaTitleDiv {
@@ -83,32 +116,21 @@ a:hover {
 	color: purple;
 }
 
-.gradient {
-	float: left;
-	background: linear-gradient(to bottom, rgb(0,221,255), white);
-	width: 3px;
-	margin-left: 10%;
-}
-
-footer {
-	display: flex;
-	display: -webkit-flex;
-	flex-direction: column;
-	width: 80%;
-	height: 10%;
-	margin: auto;
-	margin-top: 10px;
-	background-color: rgb(0,221,255);
-}
-
-footer > span {
-	font-size: 20px;
-	margin: auto; 
-}
-
 #upthumb, #downthumb {
 	height: 30px;
 	width: 30px;
 	margin-right: 3px;
 	margin-left: 3px;
+}
+
+#binDiv {
+	height: 100%;
+	width: 100%;
+	opacity: 0.5;
+	z-index: 100;
+}
+
+#bin {
+	height: 20px;
+	width: 20px;
 }

@@ -34,8 +34,18 @@ function populateIdeas(ideas) {
 		ideaUpvoteSpan.appendChild(upvotes);
 		ideaDownvoteSpan.appendChild(downvotes);
 		ideaDownvoteSpan.appendChild(downthumb);
-		document.body.insertBefore(ideaDiv, document.getElementById('showfooter'));
+		document.getElementById('ideasDiv').appendChild(ideaDiv);
 	}
+}
+
+function deleteIdea(elem) {
+	var binDiv = document.createElement('div');
+	binDiv.id = 'binDiv';
+	var bin = document.createElement('img');
+	bin.id = 'bin';
+	bin.src = '/images/bin.png';
+	binDiv.appendChild(bin);
+	elem.appendChild(binDiv);
 }
 
 function getCookie(cname) {
@@ -87,5 +97,10 @@ function getAllIdeas(cb) {
 $(document).ready(function() {
 	getMyIdeas(function(ideas) {
 		populateIdeas(ideas);
+	});
+
+	$("#addIdea").on("click", function(event) {
+		event.preventDefault();
+		window.location.assign('/privileged/me/postidea');
 	});
 });
