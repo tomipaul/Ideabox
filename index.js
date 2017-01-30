@@ -204,6 +204,15 @@ app.post('/api/member/:ideaid/comment', function(req, res) {
 	});
 });
 
+app.put('/api/member/ideas/:ideaid', function(req, res) {
+	var ref = clientDb.ref('ideas/'+req.params.ideaid);
+	ref.update(req.body, function(error) {
+		if (error) {
+			return res.json(error);
+		}
+	});
+});
+
 app.put('/api/member/:ideaid/upvote', function(req, res) {
 	var ideaId = req.params.ideaid;
 	var ref = clientDb.ref('ideas/'+ideaId);
@@ -258,6 +267,10 @@ app.put('/api/member/:ideaid/unvote/:votetype', function(req, res) {
 		}
 	});
 });
+
+app.delete('/api/member/ideas/:ideaid', function(req, res) {
+	//Delete an idea; to be implemented
+})
 
 app.use('/privileged', checkToken, verifyToken);
 
