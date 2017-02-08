@@ -33,7 +33,10 @@ function getIdea(cb) {
 
 function populateIdea(idea) {
 	var ideaObject = JSON.parse(idea);
-	document.getElementById('ideaTitle').innerHTML = ideaObject['ideaTitle'];
+	var ideaTitleDiv = document.getElementById('ideaTitle');
+	var ideaTitle = ideaObject['ideaTitle'];
+	ideaTitleDiv.innerHTML = ideaTitle;
+	ideaTitleDiv.data = ideaTitle;
 	var ideaDescription = ideaObject['ideaDescription'];
 	var converter = new showdown.Converter();
 	html = converter.makeHtml(ideaDescription);
@@ -230,15 +233,19 @@ function clickVote(elem) {
 	}
 }
 
-function ideaDescUnchanged(elem) {
-	var converter = new showdown.Converter();
-	html = converter.makeHtml(elem.data);
-	elem.innerHTML = html;
+function ideaValueUnchanged(elem) {
+	if (elem.id === 'ideaDescription') {
+		var converter = new showdown.Converter();
+		html = converter.makeHtml(elem.data);
+		elem.innerHTML = html;
+	}
 }
 
-function editIdeaDesc(elem) {
+function editIdeaValue(elem) {
 	if (elem.data === elem.textContent) {
-		ideaDescUnchanged(elem);
+		if (elem.id === 'ideaDescription') {
+			ideaValueUnchanged(elem);
+		}
 	}
 	else {
 		updateIdea(elem);
@@ -246,15 +253,15 @@ function editIdeaDesc(elem) {
 }
 
 function updateIdea(elem) {
-	var newIdeaDescription = elem.textContent;
-	var converter = new showdown.Converter();
-	html = converter.makeHtml(newIdeaDescription);
-	elem.innerHTML = html;
-
+	var newIdeaValue = elem.textContent;
+	if (elem.id === 'ideaDescription') {
+		var converter = new showdown.Converter();
+		html = converter.makeHtml(newIdeaValue);
+		elem.innerHTML = html;
+	}
 	var ideaId = window.location.hash.slice(1);
-	var newIdeaInfo = {}
-	newIdeaInfo[elem.id] = newIdeaDescription; 
-	console.log(newIdeaInfo);
+	var newIdeaInfo = {};
+	newIdeaInfo[elem.id] = newIdeaValue;
 	var cookie = getCookie('token');
 	var uri = `/api/member/ideas/${ideaId}`;
 
@@ -267,10 +274,10 @@ function updateIdea(elem) {
 		data: newIdeaInfo,
 		dataType: "text",
 		success: function(result) {
-			elem.data = newIdeaDescription;
+			elem.data = newIdeaValue;
 		},
 		error: function(xhr, status, error) {
-			ideaDescUnchanged(elem);
+			ideaValueUnchanged(elem);
 		}
 	});
 }
@@ -301,6 +308,6 @@ $(document).ready(function() {
 
 	$('#ideaDescription, #ideaTitle').on("blur", function(event) {
 		event.preventDefault();
-		editIdeaDesc(this);
+		editIdeaValue(this);
 	});
 });
