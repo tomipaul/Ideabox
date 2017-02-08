@@ -45,7 +45,7 @@ function deleteIdea(elem) {
 	bin.id = 'bin';
 	bin.src = '/images/bin.png';
 	binDiv.appendChild(bin);
-	elem.appendChild(binDiv);
+	elem.insertBefore(binDiv, elem.firstChild);
 }
 
 function getCookie(cname) {
@@ -96,11 +96,29 @@ function getAllIdeas(cb) {
 
 $(document).ready(function() {
 	getMyIdeas(function(ideas) {
+		document.getElementById('listIdeas').all = false;
 		populateIdeas(ideas);
 	});
 
 	$("#addIdea").on("click", function(event) {
 		event.preventDefault();
 		window.location.assign('/privileged/me/postidea');
+	});
+
+	$("#listIdeas").on("click", function(event) {
+		event.preventDefault();
+		var elem = this;
+		if (this.all === false) {
+			getAllIdeas(function(ideas) {
+				elem.all = true;
+				populateIdeas(ideas);
+			});
+		}
+		else {
+			getMyIdeas(function(ideas) {
+				elem.all = false;
+				populateIdeas(ideas);
+			});
+		}
 	});
 });
