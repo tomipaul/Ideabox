@@ -110,12 +110,14 @@ $(document).ready(function() {
 		var elem = this;
 		if (this.all === false) {
 			getAllIdeas(function(ideas) {
+				$("#ideasDiv").empty();
 				elem.all = true;
 				populateIdeas(ideas);
 			});
 		}
 		else {
 			getMyIdeas(function(ideas) {
+				$("#ideasDiv").empty();
 				elem.all = false;
 				populateIdeas(ideas);
 			});
