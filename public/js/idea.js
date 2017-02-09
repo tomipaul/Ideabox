@@ -282,6 +282,14 @@ function updateIdea(elem) {
 	});
 }
 
+$(document).ajaxStart(function(){
+	$("#ajaxloaderDiv").css("display", "block");
+});
+
+$(document).ajaxComplete(function(){
+    $("#ajaxloaderDiv").css("display", "none");
+});
+
 $(document).ready(function() {
 	getIdea(function(idea) {
 		populateIdea(idea);

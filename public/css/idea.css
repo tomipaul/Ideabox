@@ -113,3 +113,20 @@ header {
 	height: 50px;
 	width: 50px;
 }
+
+#ajaxloaderDiv {
+	position: absolute;
+	top: 50%;
+	left: 45%;
+	height: 100px;
+	width: 200px;
+	display: none;
+	border-radius: 8px;
+}
+
+#ajaxloader {
+	display: block;
+	margin: auto;
+	padding-top: 30px;
+	padding-bottom: 30px;
+}
