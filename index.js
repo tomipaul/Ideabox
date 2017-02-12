@@ -210,6 +210,9 @@ app.put('/api/member/ideas/:ideaid', function(req, res) {
 		if (error) {
 			return res.json(error);
 		}
+		else {
+			return res.json(req.body);
+		}
 	});
 });
 

@@ -239,32 +239,32 @@ function ideaValueUnchanged(elem) {
 		html = converter.makeHtml(elem.data);
 		elem.innerHTML = html;
 	}
+	else {
+		elem.innerHTML = elem.data;
+	}
 }
 
 function editIdeaValue(elem) {
 	if (elem.data === elem.textContent) {
-		if (elem.id === 'ideaDescription') {
-			ideaValueUnchanged(elem);
-		}
+		ideaValueUnchanged(elem);
 	}
 	else {
-		updateIdea(elem);
+		var newIdeaValue = elem.textContent;
+		if (elem.id === 'ideaDescription') {
+			var converter = new showdown.Converter();
+			html = converter.makeHtml(newIdeaValue);
+			elem.innerHTML = html;
+		}
+		updateIdea(elem, newIdeaValue);
 	}
 }
 
-function updateIdea(elem) {
-	var newIdeaValue = elem.textContent;
-	if (elem.id === 'ideaDescription') {
-		var converter = new showdown.Converter();
-		html = converter.makeHtml(newIdeaValue);
-		elem.innerHTML = html;
-	}
+function updateIdea(elem, newContent) {
 	var ideaId = window.location.hash.slice(1);
 	var newIdeaInfo = {};
-	newIdeaInfo[elem.id] = newIdeaValue;
+	newIdeaInfo[elem.id] = newContent;
 	var cookie = getCookie('token');
 	var uri = `/api/member/ideas/${ideaId}`;
-
 	$.ajax({
 		url: encodeURI(uri),
 		type: 'PUT',
@@ -274,7 +274,7 @@ function updateIdea(elem) {
 		data: newIdeaInfo,
 		dataType: "text",
 		success: function(result) {
-			elem.data = newIdeaValue;
+			elem.data = newContent;
 		},
 		error: function(xhr, status, error) {
 			ideaValueUnchanged(elem);
