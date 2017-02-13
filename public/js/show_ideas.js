@@ -38,14 +38,15 @@ function populateIdeas(ideas) {
 	}
 }
 
-function deleteIdea(elem) {
-	var binDiv = document.createElement('div');
-	binDiv.id = 'binDiv';
+function showBin(elem) {
 	var bin = document.createElement('img');
 	bin.id = 'bin';
 	bin.src = '/images/bin.png';
-	binDiv.appendChild(bin);
-	elem.insertBefore(binDiv, elem.firstChild);
+	elem.insertBefore(bin, elem.firstChild);
+}
+
+function removeBin(elem) {
+	elem.removeChild(elem.firstChild);
 }
 
 function getCookie(cname) {
@@ -103,6 +104,16 @@ $(document).ready(function() {
 	$("#addIdea").on("click", function(event) {
 		event.preventDefault();
 		window.location.assign('/privileged/me/postidea');
+	});
+
+	$("#ideasDiv").on("mouseenter", ".ideaDiv", function(event) {
+		event.preventDefault();
+		showBin(this);
+	});
+
+	$("#ideasDiv").on("mouseleave", ".ideaDiv", function(event) {
+		event.preventDefault();
+		removeBin(this);
 	});
 
 	$("#listIdeas").on("click", function(event) {

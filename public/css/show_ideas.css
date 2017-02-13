@@ -121,3 +121,15 @@ a:hover {
 	margin-right: 3px;
 	margin-left: 3px;
 }
+
+#bin {
+	width: 20px;
+	height: 20px;
+	float: right;
+	opacity: 0.4;
+	margin-right: 2px;
+}
+
+#bin:hover {
+	cursor: pointer;
+}
