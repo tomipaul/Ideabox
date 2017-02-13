@@ -272,14 +272,23 @@ app.put('/api/member/:ideaid/unvote/:votetype', function(req, res) {
 });
 
 app.delete('/api/member/ideas/:ideaid', function(req, res) {
-	//Delete an idea; to be implemented
-})
+	var ideaId = req.params.ideaid;
+	var ref = clientDb.ref(`ideas/${ideaId}`);
+	ref.remove(function(error){
+		if (error) {
+			return res.json(error);
+		}
+		else {
+			return res.json(ideaId);
+		}
+	});
+});
 
 app.use('/privileged', checkToken, verifyToken);
 
 app.get('/', function(req, res) {
 	res.redirect('/login');
-})
+});
 
 app.get('/privileged/me/postidea', function(req, res) {
 	return res.sendFile(__dirname + '/public/html/create_idea.html');
